@@ -1,0 +1,14 @@
+{
+  "name": "generator-springboot",
+  "version": "1.0.0",
+  "description": "A Yeoman generator that generates a spring-boot project",
+  "files": [
+	"generators"
+  ],
+  "author": "Mattias Larsson",
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^1.0.0"
+  },
+  "keywords": ["yeoman-generator"]
+}
