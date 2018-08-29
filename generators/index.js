@@ -10,9 +10,13 @@ module.exports = class extends Generator {
   async promptingForProjectName() {
     this.answers = await this.prompt([
       {
-        type : 'input',
+        type : 'list',
         name : 'springbootversion',
-        message : 'Spring Boot starter parent version'
+        message : 'Spring Boot starter parent version',
+	    choices: [
+		    "1.5.15.RELEASE",
+		    "2.0.4.RELEASE"
+	    ]
       },
       {
         type : 'input',
@@ -31,11 +35,9 @@ module.exports = class extends Generator {
         default : '1.0'
       }
     ]);
-
   }
 
   writePom() {
-    this.log(this.answers.artifactId);
     this.fs.copyTpl(
       this.templatePath('pom.xml'),
       this.destinationPath('pom.xml'),
@@ -47,11 +49,18 @@ module.exports = class extends Generator {
     );
   }
 
+  writeApplicationProperties() {
+    this.fs.copyTpl(
+        this.templatePath('application.properties'),
+        this.destinationPath('src/main/resources/application.properties')
+    )
+  }
+
   writeMainClass() {
     this.fs.copyTpl(
       this.templatePath('Application.java'),
       this.destinationPath('src/main/java/' + this.answers.groupId + '/Application.java'),
-      {}
+      {groupId: this.answers.groupId}
     );
   }
 
@@ -59,8 +68,24 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('PingController.java'),
       this.destinationPath('src/main/java/' + this.answers.groupId + '/rest/PingController.java'),
-      {}
+      {groupId: this.answers.groupId}
     );
+  }
+
+  writeApplicationTest() {
+    this.fs.copyTpl(
+        this.templatePath('test/ApplicationTest.java'),
+        this.destinationPath('src/test/java/' + this.answers.groupId + '/ApplicationTest.java'),
+        {groupId: this.answers.groupId}
+    )
+  }
+
+  writePingTest() {
+    this.fs.copyTpl(
+        this.templatePath('test/PingControllerTest.java'),
+        this.destinationPath('src/test/java/' + this.answers.groupId + '/rest/PingControllerTest.java'),
+        {groupId: this.answers.groupId}
+    )
   }
 };
 
